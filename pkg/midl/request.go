@@ -1,9 +1,9 @@
 package midl
 
 import (
-	"net/http"
-	"io/ioutil"
 	"bytes"
+	"io/ioutil"
+	"net/http"
 )
 
 // Inbound HTTP request

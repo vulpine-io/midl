@@ -1,8 +1,8 @@
 package midlmock
 
 import (
-	"net/http"
 	"github.com/foxcapades/go-midl/pkg/midl"
+	"net/http"
 )
 
 type Request struct {

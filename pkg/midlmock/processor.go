@@ -7,4 +7,3 @@ type BodyProcessor struct {
 func (b BodyProcessor) Process(in []byte) error {
 	return b.ProcessFunc(in)
 }
-

@@ -43,9 +43,9 @@ func MakeResponse(code int, body interface{}) Response {
 
 func MakeErrorResponse(code int, err error) Response {
 	return &response{
-		code: code,
+		code:  code,
 		error: err,
-		head: make(http.Header),
+		head:  make(http.Header),
 	}
 }
 

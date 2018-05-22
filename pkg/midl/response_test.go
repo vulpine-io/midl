@@ -1,9 +1,9 @@
 package midl
 
 import (
-	"testing"
-	"net/http"
 	"errors"
+	"net/http"
+	"testing"
 
 	c "github.com/smartystreets/goconvey/convey"
 )

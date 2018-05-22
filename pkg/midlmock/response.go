@@ -1,8 +1,8 @@
 package midlmock
 
 import (
-	"net/http"
 	"github.com/foxcapades/go-midl/pkg/midl"
+	"net/http"
 )
 
 type Response struct {
@@ -80,6 +80,3 @@ func (r *Response) SetHeaders(key string, values []string) midl.Response {
 func (r Response) RawHeaders() http.Header {
 	return r.RawHeadersFunc()
 }
-
-
-

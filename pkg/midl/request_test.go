@@ -1,24 +1,25 @@
 package midl
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
-	"io/ioutil"
 	"bytes"
 	"errors"
 	"io"
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 
 	c "github.com/smartystreets/goconvey/convey"
 )
 
-type readCloser struct { read func([]byte) (int, error) }
+type readCloser struct{ read func([]byte) (int, error) }
+
 func (r readCloser) Read(p []byte) (int, error) { return r.read(p) }
-func (r readCloser) Close() error { return nil }
+func (r readCloser) Close() error               { return nil }
 
 func TestRequest_Body(t *testing.T) {
 	c.Convey("only read the raw body once", t, func() {
-		count  := 0
+		count := 0
 		reader := readCloser{func([]byte) (int, error) {
 			count++
 			return 0, io.EOF
@@ -45,7 +46,7 @@ func TestRequest_Body(t *testing.T) {
 	})
 
 	c.Convey("does not attempt to read if an error is present", t, func() {
-		count  := 0
+		count := 0
 		reader := readCloser{func([]byte) (int, error) {
 			count++
 			return 0, io.EOF
@@ -177,7 +178,7 @@ func TestRequest_Parameters(t *testing.T) {
 		)
 		test := request{raw: req}
 		val, ok := test.Parameters("test")
-		c.So(val, c.ShouldResemble, []string{"foo","bar"})
+		c.So(val, c.ShouldResemble, []string{"foo", "bar"})
 		c.So(ok, c.ShouldBeTrue)
 	})
 
@@ -218,7 +219,7 @@ func TestRequest_ProcessBody(t *testing.T) {
 	c.Convey("does not call processor if processor is nil", t, func() {
 		body := []byte("test3")
 		req := request{body: body, hasBody: true}
-		c.So(func() {req.ProcessBody(nil)}, c.ShouldNotPanic)
+		c.So(func() { req.ProcessBody(nil) }, c.ShouldNotPanic)
 	})
 
 	c.Convey("stores error returned by processor", t, func() {

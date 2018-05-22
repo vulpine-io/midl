@@ -1,8 +1,8 @@
 package midl
 
 import (
-	"testing"
 	"github.com/smartystreets/goconvey/convey"
+	"testing"
 )
 
 func TestDefaultAdapter_AddHandlers(t *testing.T) {

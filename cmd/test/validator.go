@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"net/http"
 
@@ -27,7 +26,7 @@ func (v Validator) Handle(req midl.Request) midl.Response {
 	if !res.Valid() {
 		var out []string
 		for _, v := range res.Errors() {
-			out = append(out, v.Field() + ": " + v.Description())
+			out = append(out, v.Field()+": "+v.Description())
 		}
 		return midl.MakeResponse(http.StatusBadRequest, out)
 	}

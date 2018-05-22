@@ -1,11 +1,11 @@
 package main
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 
-	"github.com/gorilla/mux"
 	"github.com/foxcapades/go-midl/pkg/midl"
+	"github.com/gorilla/mux"
 	gjs "github.com/xeipuuv/gojsonschema"
 )
 

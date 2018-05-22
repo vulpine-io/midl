@@ -9,4 +9,3 @@ type Middleware struct {
 func (m Middleware) Handle(q midl.Request) midl.Response {
 	return m.HandleFunc(q)
 }
-

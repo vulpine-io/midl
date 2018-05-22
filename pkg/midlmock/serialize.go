@@ -21,4 +21,3 @@ func (m ErrorSerializer) Serialize(
 ) []byte {
 	return m.SerializeFunc(e, q, s)
 }
-

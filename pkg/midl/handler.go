@@ -19,4 +19,3 @@ type defaultEmptyHandler struct{}
 func (d defaultEmptyHandler) Handle(Request, Response) []byte {
 	return nil
 }
-
