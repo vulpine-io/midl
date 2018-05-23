@@ -5,10 +5,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	c "github.com/smartystreets/goconvey/convey"
-	"reflect"
 	"encoding/json"
 	"encoding/xml"
+	c "github.com/smartystreets/goconvey/convey"
+	"reflect"
 )
 
 func TestDefaultAdapter_AddHandlers(t *testing.T) {
@@ -211,7 +211,7 @@ func TestDefaultAdapter_ServeHTTP(t *testing.T) {
 				return &response{
 					code: 300,
 					body: "something",
-					head: Header{"Something": {"foo", "bar"}},
+					head: header{"Something": {"foo", "bar"}},
 				}
 			})},
 			serializer: SerializerFunc(func(interface{}) ([]byte, error) {
@@ -219,7 +219,7 @@ func TestDefaultAdapter_ServeHTTP(t *testing.T) {
 			}),
 		}.ServeHTTP(w, r)
 
-		c.So(w.HeaderMap, c.ShouldResemble, Header{"Something": {"foo", "bar"}})
+		c.So(w.HeaderMap, c.ShouldResemble, header{"Something": {"foo", "bar"}})
 	})
 
 	c.Convey("appends content type header when present", t, func() {
@@ -239,7 +239,7 @@ func TestDefaultAdapter_ServeHTTP(t *testing.T) {
 			}),
 		}.ServeHTTP(w, r)
 
-		c.So(w.HeaderMap, c.ShouldResemble, Header{"Content-Type": {"text/plain"}})
+		c.So(w.HeaderMap, c.ShouldResemble, header{"Content-Type": {"text/plain"}})
 	})
 
 	c.Convey("writes response errors", t, func() {

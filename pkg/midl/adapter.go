@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-type Writer = http.ResponseWriter
-type Header = http.Header
+type writer = http.ResponseWriter
+type header = http.Header
 
-// Middleware to Golang http.Handler adapter
+// Adapter for conversion between Middleware and Golang http.Handlers
 //
 //   handler := JSONAdapter(NewInputValidator(), ..., NewResponder())
 //   http.Handle("/", handler)
@@ -38,12 +38,12 @@ type Adapter interface {
 	SetHandlers(...Middleware) Adapter
 }
 
-// Adapter with no default settings or serializers
+// EmptyAdapter creates an Adapter with no default settings or serializers
 func EmptyAdapter() Adapter {
 	return &adapter{}
 }
 
-// Adapter defaulted for JSON responses
+// JSONAdapter creates a new Adapter defaulted for JSON responses
 func JSONAdapter(handlers ...Middleware) Adapter {
 	return &adapter{
 		contentType:   "application/json",
@@ -54,7 +54,7 @@ func JSONAdapter(handlers ...Middleware) Adapter {
 	}
 }
 
-// Adapter defaulted for XML responses
+// XMLAdapter creates a new Adapter defaulted for XML responses
 func XMLAdapter(handlers ...Middleware) Adapter {
 	return &adapter{
 		contentType:   "application/xml",
@@ -65,7 +65,7 @@ func XMLAdapter(handlers ...Middleware) Adapter {
 	}
 }
 
-// Adapter with default empty handler
+// NewAdapter creates a new Adapter instance with the provided settings
 func NewAdapter(
 	content string,
 	serial Serializer,
@@ -89,7 +89,7 @@ type adapter struct {
 	emptyHandler  EmptyHandler
 }
 
-func (d adapter) ServeHTTP(w Writer, r *http.Request) {
+func (d adapter) ServeHTTP(w writer, r *http.Request) {
 	var res Response
 
 	req, err := NewRequest(r)
@@ -158,12 +158,12 @@ func (d *adapter) SetHandlers(mid ...Middleware) Adapter {
 	return d
 }
 
-func (d adapter) writeEmpty(w Writer, q Request, s Response) {
+func (d adapter) writeEmpty(w writer, q Request, s Response) {
 	body := d.emptyHandler.Handle(q, s)
 	d.writeResponse(w, s.Code(), s.RawHeaders(), body)
 }
 
-func (d adapter) writeBody(w Writer, q Request, s Response) {
+func (d adapter) writeBody(w writer, q Request, s Response) {
 	body, err := d.serializer.Serialize(s.Body())
 
 	if err != nil {
@@ -174,12 +174,12 @@ func (d adapter) writeBody(w Writer, q Request, s Response) {
 	d.writeResponse(w, s.Code(), s.RawHeaders(), body)
 }
 
-func (d adapter) writeError(w Writer, e error, q Request, s Response) {
+func (d adapter) writeError(w writer, e error, q Request, s Response) {
 	body := d.errSerializer.Serialize(e, q, s)
 	d.writeResponse(w, s.Code(), s.RawHeaders(), body)
 }
 
-func (d adapter) writeResponse(w Writer, code int, head Header, body []byte) {
+func (d adapter) writeResponse(w writer, code int, head header, body []byte) {
 	if d.contentType != "" {
 		w.Header().Set("Content-Type", d.contentType)
 	}

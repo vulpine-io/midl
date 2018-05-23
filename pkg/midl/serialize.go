@@ -30,7 +30,7 @@ func DefaultJSONErrorSerializer() ErrorSerializer {
 	return new(defJSONErrSerializer)
 }
 
-type defJSONErrSerializer struct {}
+type defJSONErrSerializer struct{}
 
 func (d defJSONErrSerializer) Serialize(e error, _ Request, s Response) []byte {
 	s.SetCode(http.StatusInternalServerError)
@@ -41,7 +41,7 @@ func DefaultXMLErrorSerializer() ErrorSerializer {
 	return new(defXMLErrSerializer)
 }
 
-type defXMLErrSerializer struct {}
+type defXMLErrSerializer struct{}
 
 func (d defXMLErrSerializer) Serialize(e error, _ Request, s Response) []byte {
 	s.SetCode(http.StatusInternalServerError)
