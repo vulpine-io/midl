@@ -115,3 +115,23 @@ func TestDefaultResponse_SetHeaders(t *testing.T) {
 		)
 	})
 }
+
+func TestMakeErrorResponse(t *testing.T) {
+	c.Convey("", t, func() {
+		res := MakeErrorResponse(http.StatusBadRequest, errors.New("some error"))
+
+		c.So(res.Code(), c.ShouldEqual, http.StatusBadRequest)
+		c.So(res.Error(), c.ShouldResemble, errors.New("some error"))
+		c.So(res.Body(), c.ShouldResemble, nil)
+	})
+}
+
+func TestMakeResponse(t *testing.T) {
+	c.Convey("", t, func() {
+		res := MakeResponse(http.StatusOK, []string{"ok", "no"})
+
+		c.So(res.Code(), c.ShouldEqual, http.StatusOK)
+		c.So(res.Error(), c.ShouldResemble, nil)
+		c.So(res.Body(), c.ShouldResemble, []string{"ok", "no"})
+	})
+}

@@ -6,6 +6,9 @@ import (
 	"net/http"
 )
 
+type Writer = http.ResponseWriter
+type Header = http.Header
+
 // Middleware to Golang http.Handler adapter
 //
 //   handler := JSONAdapter(NewInputValidator(), ..., NewResponder())
@@ -86,7 +89,7 @@ type adapter struct {
 	emptyHandler  EmptyHandler
 }
 
-func (d adapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (d adapter) ServeHTTP(w Writer, r *http.Request) {
 	var res Response
 
 	req, err := NewRequest(r)
@@ -155,12 +158,12 @@ func (d *adapter) SetHandlers(mid ...Middleware) Adapter {
 	return d
 }
 
-func (d adapter) writeEmpty(w http.ResponseWriter, q Request, s Response) {
+func (d adapter) writeEmpty(w Writer, q Request, s Response) {
 	body := d.emptyHandler.Handle(q, s)
 	d.writeResponse(w, s.Code(), s.RawHeaders(), body)
 }
 
-func (d adapter) writeBody(w http.ResponseWriter, q Request, s Response) {
+func (d adapter) writeBody(w Writer, q Request, s Response) {
 	body, err := d.serializer.Serialize(s.Body())
 
 	if err != nil {
@@ -171,23 +174,15 @@ func (d adapter) writeBody(w http.ResponseWriter, q Request, s Response) {
 	d.writeResponse(w, s.Code(), s.RawHeaders(), body)
 }
 
-func (d adapter) writeError(
-	w http.ResponseWriter,
-	e error,
-	q Request,
-	s Response,
-) {
+func (d adapter) writeError(w Writer, e error, q Request, s Response) {
 	body := d.errSerializer.Serialize(e, q, s)
 	d.writeResponse(w, s.Code(), s.RawHeaders(), body)
 }
 
-func (d adapter) writeResponse(
-	w http.ResponseWriter,
-	code int,
-	head http.Header,
-	body []byte,
-) {
-	w.Header().Set("Content-Type", d.contentType)
+func (d adapter) writeResponse(w Writer, code int, head Header, body []byte) {
+	if d.contentType != "" {
+		w.Header().Set("Content-Type", d.contentType)
+	}
 	if head != nil {
 		for key, values := range head {
 			for _, val := range values {
