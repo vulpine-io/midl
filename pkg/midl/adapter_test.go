@@ -6,6 +6,9 @@ import (
 	"testing"
 
 	c "github.com/smartystreets/goconvey/convey"
+	"reflect"
+	"encoding/json"
+	"encoding/xml"
 )
 
 func TestDefaultAdapter_AddHandlers(t *testing.T) {
@@ -278,5 +281,57 @@ func TestDefaultAdapter_SetHandlers(t *testing.T) {
 
 		c.So(mid3, c.ShouldEqual, test.handlers[0])
 		c.So(len(test.handlers), c.ShouldEqual, 1)
+	})
+}
+
+func TestJSONAdapter(t *testing.T) {
+	c.Convey("", t, func() {
+		mid1 := MiddlewareFunc(func(Request) Response { return nil })
+		mid2 := MiddlewareFunc(func(Request) Response { return nil })
+		mid3 := MiddlewareFunc(func(Request) Response { return nil })
+		tmp := JSONAdapter(mid1, mid2, mid3)
+		tst := tmp.(*adapter)
+
+		c.So(tst.handlers[0], c.ShouldEqual, mid1)
+		c.So(tst.handlers[1], c.ShouldEqual, mid2)
+		c.So(tst.handlers[2], c.ShouldEqual, mid3)
+		c.So(tst.errSerializer, c.ShouldResemble, DefaultJSONErrorSerializer())
+		c.So(tst.emptyHandler, c.ShouldResemble, DefaultEmptyHandler())
+		c.So(reflect.ValueOf(tst.serializer), c.ShouldResemble, reflect.ValueOf(SerializerFunc(json.Marshal)))
+		c.So(tst.contentType, c.ShouldEqual, "application/json")
+	})
+}
+
+func TestXMLAdapter(t *testing.T) {
+	c.Convey("", t, func() {
+		mid1 := MiddlewareFunc(func(Request) Response { return nil })
+		mid2 := MiddlewareFunc(func(Request) Response { return nil })
+		tmp := XMLAdapter(mid1, mid2)
+		tst := tmp.(*adapter)
+
+		c.So(tst.handlers[0], c.ShouldEqual, mid1)
+		c.So(tst.handlers[1], c.ShouldEqual, mid2)
+		c.So(tst.errSerializer, c.ShouldResemble, DefaultXMLErrorSerializer())
+		c.So(tst.emptyHandler, c.ShouldResemble, DefaultEmptyHandler())
+		c.So(reflect.ValueOf(tst.serializer), c.ShouldResemble, reflect.ValueOf(SerializerFunc(xml.Marshal)))
+		c.So(tst.contentType, c.ShouldEqual, "application/xml")
+	})
+}
+
+func TestNewAdapter(t *testing.T) {
+	c.Convey("", t, func() {
+		mid1 := MiddlewareFunc(func(Request) Response { return nil })
+		mid2 := MiddlewareFunc(func(Request) Response { return nil })
+		seri := SerializerFunc(func(interface{}) ([]byte, error) { return nil, nil })
+		err := ErrorSerializerFunc(func(error, Request, Response) []byte { return nil })
+		tmp := NewAdapter("something/custom", seri, err, mid1, mid2)
+		tst := tmp.(*adapter)
+
+		c.So(tst.handlers[0], c.ShouldEqual, mid1)
+		c.So(tst.handlers[1], c.ShouldEqual, mid2)
+		c.So(tst.errSerializer, c.ShouldEqual, err)
+		c.So(tst.emptyHandler, c.ShouldResemble, DefaultEmptyHandler())
+		c.So(tst.serializer, c.ShouldEqual, seri)
+		c.So(tst.contentType, c.ShouldEqual, "something/custom")
 	})
 }

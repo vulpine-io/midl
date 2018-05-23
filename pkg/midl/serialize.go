@@ -27,19 +27,23 @@ func (f ErrorSerializerFunc) Serialize(e error, q Request, s Response) []byte {
 }
 
 func DefaultJSONErrorSerializer() ErrorSerializer {
-	return ErrorSerializerFunc(defJSONErrSerializer)
+	return new(defJSONErrSerializer)
 }
 
-func defJSONErrSerializer(e error, _ Request, s Response) []byte {
+type defJSONErrSerializer struct {}
+
+func (d defJSONErrSerializer) Serialize(e error, _ Request, s Response) []byte {
 	s.SetCode(http.StatusInternalServerError)
 	return []byte(fmt.Sprintf(`{"error":%s}`, strconv.Quote(e.Error())))
 }
 
 func DefaultXMLErrorSerializer() ErrorSerializer {
-	return ErrorSerializerFunc(defXMLErrSerializer)
+	return new(defXMLErrSerializer)
 }
 
-func defXMLErrSerializer(e error, _ Request, s Response) []byte {
+type defXMLErrSerializer struct {}
+
+func (d defXMLErrSerializer) Serialize(e error, _ Request, s Response) []byte {
 	s.SetCode(http.StatusInternalServerError)
 	return []byte(fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
 <error>%s</error>`, e.Error()))
