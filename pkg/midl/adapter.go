@@ -9,7 +9,8 @@ import (
 type writer = http.ResponseWriter
 type header = http.Header
 
-// Adapter for conversion between Middleware and Golang http.Handlers
+// Adapter for conversion between Middleware and Golang
+// http.Handlers.
 //
 //   handler := JSONAdapter(NewInputValidator(), ..., NewResponder())
 //   http.Handle("/", handler)
@@ -17,24 +18,28 @@ type header = http.Header
 type Adapter interface {
 	http.Handler
 
-	// Register a handler for handling empty response bodies
+	// EmptyHandler registers a handler for empty response
+	// bodies.
 	//
 	// Defaults to an empty byte array
 	EmptyHandler(EmptyHandler) Adapter
 
-	// Set the default content type header
+	// Content-Type sets the default content type header.
 	ContentType(string) Adapter
 
-	// Register a handler for serializing errors
+	// ErrorSerializer registers a handler for serializing
+	// errors.
 	ErrorSerializer(ErrorSerializer) Adapter
 
-	// Register a body serializer
+	// Serializer registers the default body serializer.
 	Serializer(Serializer) Adapter
 
-	// Append handlers to the list of Middleware handlers
+	// AddHandlers appends handlers to the list of Middleware
+	// handlers.
 	AddHandlers(...Middleware) Adapter
 
-	// Set and/or overwrite the current list Middleware handlers
+	// SetHandlers set and/or overwrite the current list of
+	// Middleware handlers.
 	SetHandlers(...Middleware) Adapter
 }
 
@@ -111,7 +116,7 @@ func (d adapter) ServeHTTP(w writer, r *http.Request) {
 	}
 
 	if res == nil {
-		d.writeError(w, ErrorNoHandlers, req, NewResponse())
+		d.writeError(w, ErrNoHandlers, req, NewResponse())
 		return
 	}
 
@@ -193,8 +198,8 @@ func (d adapter) writeResponse(w writer, code int, head header, body []byte) {
 
 	w.WriteHeader(code)
 	if body == nil {
-		w.Write([]byte{})
+		_, _ = w.Write([]byte{})
 	} else {
-		w.Write(body)
+		_, _ = w.Write(body)
 	}
 }

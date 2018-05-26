@@ -162,7 +162,7 @@ func TestDefaultAdapter_ServeHTTP(t *testing.T) {
 			),
 		}.ServeHTTP(w, nil)
 
-		c.So(w.Body.Bytes(), c.ShouldResemble, []byte(ErrorWrappedNil.Error()))
+		c.So(w.Body.Bytes(), c.ShouldResemble, []byte(ErrWrappedNil.Error()))
 	})
 
 	c.Convey("writes no handler error if no handlers are present", t, func() {
@@ -178,7 +178,7 @@ func TestDefaultAdapter_ServeHTTP(t *testing.T) {
 			),
 		}.ServeHTTP(w, r)
 
-		c.So(w.Body.Bytes(), c.ShouldResemble, []byte(ErrorNoHandlers.Error()))
+		c.So(w.Body.Bytes(), c.ShouldResemble, []byte(ErrNoHandlers.Error()))
 	})
 
 	c.Convey("writes serializer error if present", t, func() {

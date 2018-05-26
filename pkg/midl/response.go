@@ -4,35 +4,64 @@ import (
 	"net/http"
 )
 
-// HTTP Response builder
+// Response defines a builder that can be used to build
+// an HTTP response.
 type Response interface {
 
-	// Retrieve the body (if any) stored on the HTTP response.
+	// Body returns the body (if any) stored on the HTTP
+	// response.
 	Body() interface{}
 
-	// Retrieve HTTP status code from the HTTP response.
-	// Defaults to 200
+	// Code returns the HTTP status code from the HTTP
+	// response.
 	Code() int
 
-	// Retrieve the error (if any) stored on the HTTP response.
+	// Error returns the error (if any) stored on the HTTP
+	// response.
 	Error() error
 
-	// Retrieve a header stored header value by key.
+	// Header retrieves a header stored header value by key.
 	Header(key string) string
 
-	// Retrieve stored headers values by key.
+	// Headers retrieves a slice of stored headers values by
+	// key.
 	Headers(key string) []string
 
+	// SetBody stores the given value as the body value for
+	// this response.
 	SetBody(any interface{}) Response
+
+	// SetCode stores the given value as the HTTP status code
+	// for this response.
 	SetCode(code int) Response
+
+	// SetError stores the given value as the error value for
+	// this response.
 	SetError(error) Response
+
+	// AddHeader creates or appends to the header values for
+	// this response.
 	AddHeader(key, value string) Response
+
+	// AddedHeaders creates or appends a list of headers to
+	// this response.
 	AddHeaders(key string, value []string) Response
+
+	// SetHeader creates or overwrites a header on this
+	// response.
 	SetHeader(key, value string) Response
+
+	// SetHeaders creates or overwrites a list of headers on
+	// this response.
 	SetHeaders(key string, values []string) Response
+
+	// RawHeaders grants access to the internal http.Header
+	// map.
 	RawHeaders() http.Header
 }
 
+// MakeResponse creates a Response instance with the given
+// body and status code values.
 func MakeResponse(code int, body interface{}) Response {
 	return &response{
 		code: code,
@@ -41,6 +70,8 @@ func MakeResponse(code int, body interface{}) Response {
 	}
 }
 
+// MakeErrorResponse creates a Response instance with the
+// given error and status code.
 func MakeErrorResponse(code int, err error) Response {
 	return &response{
 		code:  code,
@@ -49,6 +80,8 @@ func MakeErrorResponse(code int, err error) Response {
 	}
 }
 
+// NewResponse creates a new Response instance.
+// Default status code is 200 (OK).
 func NewResponse() Response {
 	return &response{
 		code: http.StatusOK,

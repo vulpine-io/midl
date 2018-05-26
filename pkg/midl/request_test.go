@@ -214,6 +214,8 @@ func TestRequest_ProcessBody(t *testing.T) {
 			input = b
 			return nil
 		}))
+
+		c.So(input, c.ShouldBeNil)
 	})
 
 	c.Convey("does not call processor if processor is nil", t, func() {
@@ -245,7 +247,7 @@ func TestNewRequest(t *testing.T) {
 	c.Convey("returns error if request is nil", t, func() {
 		req, err := NewRequest(nil)
 		c.So(req, c.ShouldBeNil)
-		c.So(err, c.ShouldResemble, ErrorWrappedNil)
+		c.So(err, c.ShouldResemble, ErrWrappedNil)
 	})
 
 	c.Convey("returns wrapped request if request is not nil", t, func() {

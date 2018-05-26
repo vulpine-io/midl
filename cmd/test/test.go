@@ -9,6 +9,8 @@ import (
 	gjs "github.com/xeipuuv/gojsonschema"
 )
 
+// input is a simple JSON schema example which will be used
+// to validate incoming HTTP requests.
 const input = `{
   "type": "object",
   "properties": {

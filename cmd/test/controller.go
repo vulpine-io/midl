@@ -7,15 +7,20 @@ import (
 	"github.com/foxcapades/go-midl/pkg/midl"
 )
 
+// Request defines the input type for demo HTTP inputs.
 type Request struct {
 	Start []string `json:"start"`
 	End   []string `json:"end"`
 }
 
+// Response defines an output type for demo HTTP responses.
 type Response struct {
 	Combos []string `json:"combos" xml:"combo"`
 }
 
+// Controller is a simple demo implementation of a
+// midl.MiddlewareFunc compatible controller which produces
+// a cartesian product of input strings.
 func Controller(req midl.Request) midl.Response {
 	var input Request
 	var output Response

@@ -6,41 +6,49 @@ import (
 	"net/http"
 )
 
-// Inbound HTTP request
+// Request defines a wrapper/accessor for the default Golang
+// http.Request struct.
 type Request interface {
-	// Get the first header stored at the given key
+	// Header gets the first header stored at the given key.
 	Header(key string) (value string, ok bool)
 
-	// Get all headers stored at the given key
+	// Headers gets all headers stored at the given key.
 	Headers(key string) (values []string, ok bool)
 
-	// Get the request body bytes.
+	// Body retrieves the request body bytes.
 	//
 	// In the event of a read error, returns nil; the error
 	// will be available by calling the Error method.
 	//
-	// Safe for multiple calls.
+	// Multiple calls will only read the http.Request.Body
+	// reader once.
 	Body() []byte
+
+	// Host retrieves the host string from the request.
 	Host() string
 
-	// Get the query parameter stored at a given key
+	// Parameter get the query parameter stored at a given
+	// key.
 	Parameter(key string) (value string, ok bool)
 
-	// Get all query parameters stored at a given key
+	// Parameters gets all query parameters stored at a given
+	// key.
 	Parameters(key string) (values []string, ok bool)
 
-	// Retrieve raw Go standard library request
-	// Warning: Modifying this may affect the output of other
-	// Request methods.
+	// RawRequest retrieves the raw Go standard library
+	// request.
+	//
+	// Warning: Modifying the raw http.Request may impact the
+	// output of other Request methods.
 	RawRequest() *http.Request
 
-	// Retrieve the last error (if any) encountered by method
-	// calls to Request.
+	// Error retrieves the last error (if any) encountered by
+	// method calls to Request.
 	// If no error is present, returns nil.
 	Error() error
 
-	// Run the given BodyProcessor against the body bytes of
-	// this request.
+	// ProcessBody runs the given BodyProcessor against the
+	// body bytes of this request.
 	//
 	// Errors emitted by the body processor will be
 	// retrievable from the Error method.
@@ -50,9 +58,13 @@ type Request interface {
 	ProcessBody(BodyProcessor) Request
 }
 
+// NewRequest constructs a new instance of midl.Request
+// wrapping a provided http.Request.  If the provided
+// request pointer is nil, an error is returned instead of
+// a Request instance.
 func NewRequest(r *http.Request) (Request, error) {
 	if r == nil {
-		return nil, ErrorWrappedNil
+		return nil, ErrWrappedNil
 	}
 
 	return &request{raw: r}, nil

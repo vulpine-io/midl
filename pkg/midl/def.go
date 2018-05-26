@@ -2,7 +2,9 @@ package midl
 
 import "errors"
 
+// Listing of errors that can be returned by the midl
+// library specifically.
 var (
-	ErrorWrappedNil = errors.New("cannot wrap a nil request")
-	ErrorNoHandlers = errors.New("no handlers")
+	ErrWrappedNil = errors.New("cannot wrap a nil request")
+	ErrNoHandlers = errors.New("no handlers")
 )
