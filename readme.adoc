@@ -1,0 +1,60 @@
+= midl
+
+image:https://img.shields.io/github/license/Foxcapades/go-midl.svg[MIT License]
+image:https://travis-ci.org/Foxcapades/go-midl.svg?branch=master[Build Status,link=https://travis-ci.org/Foxcapades/go-midl]
+image:https://img.shields.io/codecov/c/github/Foxcapades/go-midl.svg[Codecov,link=https://codecov.io/gh/Foxcapades/go-midl]
+image:https://goreportcard.com/badge/github.com/Foxcapades/go-midl[Go Report Card, link=https://goreportcard.com/report/github.com/Foxcapades/go-midl]
+
+Serializing middleware stack for building APIs in Go.
+
+== Example
+
+=== Simple
+
+[source,go]
+----
+package main
+
+import (
+    "net/http"
+    "github.com/foxcapades/go-midl/pkg/midl"
+)
+
+func main() {
+    http.Handle("/", midl.JSONAdapter(
+        NewSessionHandler(),
+        NewInputValidator(),
+        NewController(),
+    ))
+    log.Fatal(http.ListenAndServe(":8080", nil))
+}
+----
+
+=== Working demo
+
+Example usage using the demo available in the `cmd/test` package.
+
+[source,bash]
+----
+$ go run cmd/test/*.go &
+$ curl -iX POST -d'{}' localhost:8080/combine
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Date: Tue, 29 May 2018 23:33:56 GMT
+Content-Length: 51
+
+["start: start is required","end: end is required"]
+$ curl -iX POST -d'{"start":["a","b"], "end":["c","d"]}' localhost:8080/combine
+HTTP/1.1 200 OK
+Content-Type: application/json
+Custom-Header: some value
+Date: Tue, 29 May 2018 23:34:39 GMT
+Content-Length: 32
+
+{"combos":["ac","ad","bc","bd"]}
+----
+
+== Testing
+
+A full set of configurable mock implementations for every project interface is
+available in the `github.com/foxcapades/go-midl/pkg/midlmock` package.
