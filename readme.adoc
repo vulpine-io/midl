@@ -7,6 +7,12 @@ image:https://goreportcard.com/badge/github.com/Foxcapades/go-midl[Go Report Car
 
 Serializing middleware stack for building APIs in Go.
 
+. Install
+[source,bash]
+----
+$ go get gopkg.in/foxcapades/go-midl.v1/pkg/midl
+----
+
 == Example
 
 === Simple
@@ -17,7 +23,7 @@ package main
 
 import (
     "net/http"
-    "github.com/foxcapades/go-midl/pkg/midl"
+    "gopkg.in/foxcapades/go-midl.v1/pkg/midl"
 )
 
 func main() {
@@ -57,4 +63,4 @@ Content-Length: 32
 == Testing
 
 A full set of configurable mock implementations for every project interface is
-available in the `github.com/foxcapades/go-midl/pkg/midlmock` package.
+available in the `gopkg.in/foxcapades/go-midl.v1/pkg/midlmock` package.
