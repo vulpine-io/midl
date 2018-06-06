@@ -1,6 +1,8 @@
 package midlmock
 
-import "github.com/foxcapades/go-midl/pkg/midl"
+import (
+	"gopkg.in/foxcapades/go-midl.v1/pkg/midl"
+)
 
 // Serializer is a configurable mock implementation of the
 // midl.Serializer interface.

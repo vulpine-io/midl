@@ -4,11 +4,11 @@ import (
 	"errors"
 	"net/http/httptest"
 	"testing"
-
 	"encoding/json"
 	"encoding/xml"
-	c "github.com/smartystreets/goconvey/convey"
 	"reflect"
+
+	c "github.com/smartystreets/goconvey/convey"
 )
 
 func TestDefaultAdapter_AddHandlers(t *testing.T) {

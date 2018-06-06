@@ -1,8 +1,9 @@
 package midlmock
 
 import (
-	"github.com/foxcapades/go-midl/pkg/midl"
 	"net/http"
+
+	"gopkg.in/foxcapades/go-midl.v1/pkg/midl"
 )
 
 // Response is a configurable mock implementation of the

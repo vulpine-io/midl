@@ -3,7 +3,7 @@ package midlmock
 import (
 	"net/http"
 
-	"github.com/foxcapades/go-midl/pkg/midl"
+	"gopkg.in/foxcapades/go-midl.v1/pkg/midl"
 )
 
 // Adapter is a configurable mock implementation of the

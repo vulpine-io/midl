@@ -3,13 +3,13 @@ package midl
 import (
 	"errors"
 	"testing"
-
-	"github.com/smartystreets/goconvey/convey"
 	"net/http"
+
+	c "github.com/smartystreets/goconvey/convey"
 )
 
 func TestErrorSerializerFunc_Serialize(t *testing.T) {
-	convey.Convey("", t, func() {
+	c.Convey("", t, func() {
 		var count int
 		var err error
 		var req Request
@@ -28,16 +28,16 @@ func TestErrorSerializerFunc_Serialize(t *testing.T) {
 			&response{body: map[string]string{"test": "value"}},
 		)
 
-		convey.So(count, convey.ShouldEqual, 1)
-		convey.So(err, convey.ShouldResemble, errors.New("some error"))
-		convey.So(val, convey.ShouldResemble, []byte("test value"))
-		convey.So(req, convey.ShouldResemble, &request{body: []byte("body")})
-		convey.So(res, convey.ShouldResemble, &response{body: map[string]string{"test": "value"}})
+		c.So(count, c.ShouldEqual, 1)
+		c.So(err, c.ShouldResemble, errors.New("some error"))
+		c.So(val, c.ShouldResemble, []byte("test value"))
+		c.So(req, c.ShouldResemble, &request{body: []byte("body")})
+		c.So(res, c.ShouldResemble, &response{body: map[string]string{"test": "value"}})
 	})
 }
 
 func TestSerializerFunc_Serialize(t *testing.T) {
-	convey.Convey("", t, func() {
+	c.Convey("", t, func() {
 		var count int
 		var out interface{}
 
@@ -48,31 +48,31 @@ func TestSerializerFunc_Serialize(t *testing.T) {
 		})
 		val, err := run.Serialize(map[string]string{"test": "value"})
 
-		convey.So(count, convey.ShouldEqual, 1)
-		convey.So(out, convey.ShouldResemble, map[string]string{"test": "value"})
-		convey.So(val, convey.ShouldResemble, []byte("test value"))
-		convey.So(err, convey.ShouldResemble, errors.New("test error"))
+		c.So(count, c.ShouldEqual, 1)
+		c.So(out, c.ShouldResemble, map[string]string{"test": "value"})
+		c.So(val, c.ShouldResemble, []byte("test value"))
+		c.So(err, c.ShouldResemble, errors.New("test error"))
 	})
 }
 
 func TestJSONErrorSerializer(t *testing.T) {
-	convey.Convey("", t, func() {
+	c.Convey("", t, func() {
 		res := response{code: http.StatusOK}
 		data := DefaultJSONErrorSerializer().
 			Serialize(errors.New("something"), nil, &res)
-		convey.So(res.code, convey.ShouldEqual, http.StatusInternalServerError)
-		convey.So(data, convey.ShouldResemble, []byte(`{"error":"something"}`))
+		c.So(res.code, c.ShouldEqual, http.StatusInternalServerError)
+		c.So(data, c.ShouldResemble, []byte(`{"error":"something"}`))
 	})
 }
 
 func TestXMLErrorSerializer(t *testing.T) {
-	convey.Convey("", t, func() {
+	c.Convey("", t, func() {
 		res := response{code: http.StatusOK}
 		data := DefaultXMLErrorSerializer().
 			Serialize(errors.New("something"), nil, &res)
 
-		convey.So(res.code, convey.ShouldEqual, http.StatusInternalServerError)
-		convey.So(string(data), convey.ShouldResemble,
+		c.So(res.code, c.ShouldEqual, http.StatusInternalServerError)
+		c.So(string(data), c.ShouldResemble,
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<error>something</error>")
 	})
 }

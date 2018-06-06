@@ -1,7 +1,7 @@
 package midlmock
 
 import (
-	"github.com/foxcapades/go-midl/pkg/midl"
+	"gopkg.in/foxcapades/go-midl.v1/pkg/midl"
 )
 
 // EmptyHandler is a configurable mock implementation of the

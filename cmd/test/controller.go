@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/foxcapades/go-midl/pkg/midl"
+	"gopkg.in/foxcapades/go-midl.v1/pkg/midl"
 )
 
 // Request defines the input type for demo HTTP inputs.
