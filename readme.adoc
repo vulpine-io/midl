@@ -7,7 +7,7 @@ image:https://goreportcard.com/badge/github.com/Foxcapades/go-midl[Go Report Car
 
 Serializing middleware stack for building APIs in Go.
 
-. Install
+.Install
 [source,bash]
 ----
 $ go get gopkg.in/foxcapades/go-midl.v1/pkg/midl
