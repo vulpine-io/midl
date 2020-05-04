@@ -131,6 +131,10 @@ func (d adapter) ServeHTTP(w writer, r *http.Request) {
 	}
 
 	d.writeBody(w, req, res)
+
+	for _, fn := range res.Callbacks() {
+		go fn()
+	}
 }
 
 func (d *adapter) EmptyHandler(handler EmptyHandler) Adapter {
