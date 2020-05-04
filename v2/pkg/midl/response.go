@@ -58,6 +58,15 @@ type Response interface {
 	// RawHeaders grants access to the internal http.Header
 	// map.
 	RawHeaders() http.Header
+
+	// Callback allows providing a request completion callback
+	// function that will be called asynchronously on request
+	// completion.
+	Callback(func()) Response
+
+	// Callbacks returns the list of set callbacks on the
+	// Response object.
+	Callbacks() []func()
 }
 
 // MakeResponse creates a Response instance with the given
@@ -94,6 +103,7 @@ type response struct {
 	code  int
 	error error
 	head  http.Header
+	cbs   []func()
 }
 
 func (d response) Body() interface{} {
@@ -155,4 +165,13 @@ func (d *response) SetHeaders(key string, values []string) Response {
 
 func (d response) RawHeaders() http.Header {
 	return d.head
+}
+
+func (d *response) Callback(fn func()) Response {
+	d.cbs = append(d.cbs, fn)
+	return d
+}
+
+func (d *response) Callbacks() []func() {
+	return d.cbs
 }

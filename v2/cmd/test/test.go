@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Foxcapades/go-midl/v2/pkg/midl"
+	"github.com/Foxcapades/go-midl/pkg/midl"
 	"github.com/gorilla/mux"
 	gjs "github.com/xeipuuv/gojsonschema"
 )
