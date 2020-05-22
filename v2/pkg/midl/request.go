@@ -56,6 +56,10 @@ type Request interface {
 	// Calls to this method will do nothing if an error has
 	// been previously encountered.
 	ProcessBody(BodyProcessor) Request
+
+	// AdditionalContext returns a map for use in assigning
+	// additional arbitrary context data to a request.
+	AdditionalContext() map[interface{}]interface{}
 }
 
 // NewRequest constructs a new instance of midl.Request
@@ -67,7 +71,7 @@ func NewRequest(r *http.Request) (Request, error) {
 		return nil, ErrWrappedNil
 	}
 
-	return &request{raw: r}, nil
+	return &request{raw: r, ctx: map[interface{}]interface{}{}}, nil
 }
 
 type request struct {
@@ -75,6 +79,7 @@ type request struct {
 	error   error
 	body    []byte
 	hasBody bool
+	ctx     map[interface{}]interface{}
 }
 
 func (r *request) readBody() {
@@ -141,4 +146,8 @@ func (r *request) ProcessBody(processor BodyProcessor) Request {
 	}
 
 	return r
+}
+
+func (r *request) AdditionalContext() map[interface{}]interface{} {
+	return r.ctx
 }

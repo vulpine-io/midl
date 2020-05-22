@@ -23,6 +23,17 @@ type Response struct {
 	SetHeaderFunc  func(key, value string)
 	SetHeadersFunc func(key string, values []string)
 	RawHeadersFunc func() http.Header
+	CallbackFunc   func(f func())
+	CallbacksFunc  func() []func()
+}
+
+func (r *Response) Callback(f func()) midl.Response {
+	r.CallbackFunc(f)
+	return r
+}
+
+func (r Response) Callbacks() []func() {
+	return r.CallbacksFunc()
 }
 
 // Body is a passthrough for the function stored at the

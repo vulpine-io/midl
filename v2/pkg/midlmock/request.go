@@ -9,16 +9,21 @@ import (
 // Request is a configurable mock implementation of the
 // midl.Request interface.
 type Request struct {
-	HeaderFunc     func(string) (string, bool)
-	HeadersFunc    func(string) ([]string, bool)
-	BodyFunc       func() []byte
-	HostFunc       func() string
-	ParameterFunc  func(string) (string, bool)
-	ParametersFunc func(string) ([]string, bool)
-	RawRequestFunc func() *http.Request
-	ErrorFunc      func() error
+	HeaderFunc            func(string) (string, bool)
+	HeadersFunc           func(string) ([]string, bool)
+	BodyFunc              func() []byte
+	HostFunc              func() string
+	ParameterFunc         func(string) (string, bool)
+	ParametersFunc        func(string) ([]string, bool)
+	RawRequestFunc        func() *http.Request
+	ErrorFunc             func() error
+	AdditionalContextFunc func() map[interface{}]interface{}
 
 	ProcessBodyFunc func(midl.BodyProcessor)
+}
+
+func (r Request) AdditionalContext() map[interface{}]interface{} {
+	return r.AdditionalContextFunc()
 }
 
 // Header is a passthrough for the function stored at the
