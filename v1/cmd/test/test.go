@@ -4,9 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Foxcapades/go-midl/v2/pkg/midl"
 	"github.com/gorilla/mux"
 	gjs "github.com/xeipuuv/gojsonschema"
+
+	"github.com/vulpine-io/go-midl/v1/pkg/midl"
 )
 
 // input is a simple JSON schema example which will be used

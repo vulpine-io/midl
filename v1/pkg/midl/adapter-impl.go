@@ -1,74 +1,6 @@
 package midl
 
-import (
-	"encoding/json"
-	"encoding/xml"
-	"net/http"
-)
-
-type writer = http.ResponseWriter
-type header = http.Header
-
-// Adapter for conversion between Middleware and Golang
-// http.Handlers.
-//
-//   handler := JSONAdapter(NewInputValidator(), ..., NewResponder())
-//   http.Handle("/", handler)
-//   log.Fatal(http.ListenAndServe(":8080", nil))
-type Adapter interface {
-	http.Handler
-
-	// EmptyHandler registers a handler for empty response
-	// bodies.
-	//
-	// Defaults to an empty byte array
-	EmptyHandler(EmptyHandler) Adapter
-
-	// Content-Type sets the default content type header.
-	ContentType(string) Adapter
-
-	// ErrorSerializer registers a handler for serializing
-	// errors.
-	ErrorSerializer(ErrorSerializer) Adapter
-
-	// Serializer registers the default body serializer.
-	Serializer(Serializer) Adapter
-
-	// AddHandlers appends handlers to the list of Middleware
-	// handlers.
-	AddHandlers(...Middleware) Adapter
-
-	// SetHandlers set and/or overwrite the current list of
-	// Middleware handlers.
-	SetHandlers(...Middleware) Adapter
-}
-
-// EmptyAdapter creates an Adapter with no default settings or serializers
-func EmptyAdapter() Adapter {
-	return &adapter{}
-}
-
-// JSONAdapter creates a new Adapter defaulted for JSON responses
-func JSONAdapter(handlers ...Middleware) Adapter {
-	return &adapter{
-		contentType:   "application/json",
-		serializer:    SerializerFunc(json.Marshal),
-		errSerializer: DefaultJSONErrorSerializer(),
-		emptyHandler:  DefaultEmptyHandler(),
-		handlers:      handlers,
-	}
-}
-
-// XMLAdapter creates a new Adapter defaulted for XML responses
-func XMLAdapter(handlers ...Middleware) Adapter {
-	return &adapter{
-		contentType:   "application/xml",
-		serializer:    SerializerFunc(xml.Marshal),
-		errSerializer: DefaultXMLErrorSerializer(),
-		emptyHandler:  DefaultEmptyHandler(),
-		handlers:      handlers,
-	}
-}
+import "net/http"
 
 // NewAdapter creates a new Adapter instance with the provided settings
 func NewAdapter(
@@ -189,9 +121,12 @@ func (d adapter) writeError(w writer, e error, q Request, s Response) {
 }
 
 func (d adapter) writeResponse(w writer, code int, head header, body []byte) {
-	if d.contentType != "" {
+
+	// Don't override user provided header if present.
+	if _, ok := head["Content-Type"]; !ok && d.contentType != "" {
 		w.Header().Set("Content-Type", d.contentType)
 	}
+
 	if head != nil {
 		for key, values := range head {
 			for _, val := range values {

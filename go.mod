@@ -1,4 +1,4 @@
-module github.com/Foxcapades/go-midl/v2
+module github.com/vulpine-io/go-midl
 
 go 1.14
 

@@ -1,18 +1,9 @@
 = midl
 
-image:https://img.shields.io/github/license/Foxcapades/go-midl.svg[MIT License]
-image:https://travis-ci.org/Foxcapades/go-midl.svg?branch=master[Build Status,link=https://travis-ci.org/Foxcapades/go-midl]
-image:https://img.shields.io/codecov/c/github/Foxcapades/go-midl.svg[Codecov,link=https://codecov.io/gh/Foxcapades/go-midl]
-image:https://goreportcard.com/badge/github.com/Foxcapades/go-midl[Go Report Card, link=https://goreportcard.com/report/github.com/Foxcapades/go-midl]
-
-[IMPORTANT]
---
-This repository is no longer maintained here.
-
-It has been moved to
-https://github.com/vulpine-io/midl[`github.com/vulpine-io/midl`] and all future
-updates will be done there.
---
+image:https://img.shields.io/github/license/vulpine-io/go-midl.svg[MIT License]
+image:https://travis-ci.org/vulpine-io/go-midl.svg?branch=master[Build Status,link=https://travis-ci.org/vulpine-io/go-midl]
+image:https://img.shields.io/codecov/c/github/vulpine-io/go-midl.svg[Codecov,link=https://codecov.io/gh/vulpine-io/go-midl]
+image:https://goreportcard.com/badge/github.com/vulpine-io/go-midl[Go Report Card, link=https://goreportcard.com/report/github.com/vulpine-io/go-midl]
 
 Serializing middleware stack for building APIs in Go.
 

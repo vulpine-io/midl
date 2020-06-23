@@ -3,7 +3,7 @@ package midlmock
 import (
 	"net/http"
 
-	"github.com/Foxcapades/go-midl/v2/pkg/midl"
+	"github.com/vulpine-io/go-midl/v1/pkg/midl"
 )
 
 // Request is a configurable mock implementation of the

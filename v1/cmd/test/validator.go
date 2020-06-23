@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/Foxcapades/go-midl/v2/pkg/midl"
+	"github.com/vulpine-io/go-midl/v1/pkg/midl"
 	gjs "github.com/xeipuuv/gojsonschema"
 )
 
