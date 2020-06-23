@@ -1,16 +1,16 @@
 = midl
 
-image:https://img.shields.io/github/license/vulpine-io/go-midl.svg[MIT License]
-image:https://travis-ci.org/vulpine-io/go-midl.svg?branch=master[Build Status,link=https://travis-ci.org/vulpine-io/go-midl]
-image:https://img.shields.io/codecov/c/github/vulpine-io/go-midl.svg[Codecov,link=https://codecov.io/gh/vulpine-io/go-midl]
-image:https://goreportcard.com/badge/github.com/vulpine-io/go-midl[Go Report Card, link=https://goreportcard.com/report/github.com/vulpine-io/go-midl]
+image:https://img.shields.io/github/license/vulpine-io/midl.svg[MIT License]
+image:https://travis-ci.org/vulpine-io/midl.svg?branch=master[Build Status,link=https://travis-ci.org/vulpine-io/midl]
+image:https://img.shields.io/codecov/c/github/vulpine-io/midl.svg[Codecov,link=https://codecov.io/gh/vulpine-io/midl]
+image:https://goreportcard.com/badge/github.com/vulpine-io/midl[Go Report Card, link=https://goreportcard.com/report/github.com/vulpine-io/midl]
 
 Serializing middleware stack for building APIs in Go.
 
 .Install
 [source,bash]
 ----
-$ go get gopkg.in/foxcapades/go-midl.v1/pkg/midl
+$ go get gopkg.in/foxcapades/midl.v1/pkg/midl
 ----
 
 == Example
@@ -23,7 +23,7 @@ package main
 
 import (
     "net/http"
-    "gopkg.in/foxcapades/go-midl.v1/pkg/midl"
+    "gopkg.in/foxcapades/midl.v1/pkg/midl"
 )
 
 func main() {
@@ -63,4 +63,4 @@ Content-Length: 32
 == Testing
 
 A full set of configurable mock implementations for every project interface is
-available in the `gopkg.in/foxcapades/go-midl.v1/pkg/midlmock` package.
+available in the `gopkg.in/foxcapades/midl.v1/pkg/midlmock` package.

@@ -3,7 +3,7 @@ package midlmock
 import (
 	"net/http"
 
-	"github.com/vulpine-io/go-midl/v1/pkg/midl"
+	"github.com/vulpine-io/midl/v1/pkg/midl"
 )
 
 // Response is a configurable mock implementation of the

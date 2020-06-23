@@ -1,4 +1,4 @@
-module github.com/vulpine-io/go-midl
+module github.com/vulpine-io/midl
 
 go 1.14
 

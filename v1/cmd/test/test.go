@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	gjs "github.com/xeipuuv/gojsonschema"
 
-	"github.com/vulpine-io/go-midl/v1/pkg/midl"
+	"github.com/vulpine-io/midl/v1/pkg/midl"
 )
 
 // input is a simple JSON schema example which will be used

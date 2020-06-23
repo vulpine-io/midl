@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/vulpine-io/go-midl/v1/pkg/midl"
+	"github.com/vulpine-io/midl/v1/pkg/midl"
 )
 
 // Request defines the input type for demo HTTP inputs.
