@@ -3,11 +3,10 @@ language: go
 go_import_path: github.com/vulpine-io/midl
 
 go:
-- "1.9.x"
-- "1.10.x"
+- "1.14.x"
 
-before_install:
-  - go get -t -v ./...
+env:
+  - GO111MODULE=on
 
 script:
   - go test github.com/vulpine-io/midl/pkg/midl -race -coverprofile=coverage.txt -covermode=atomic
