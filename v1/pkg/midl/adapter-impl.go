@@ -19,7 +19,9 @@ func NewAdapter(
 }
 
 type adapter struct {
-	handlers      []Middleware
+	handlers []Middleware
+	wrappers []RequestWrapper
+
 	serializer    Serializer
 	errSerializer ErrorSerializer
 	contentType   string
@@ -28,11 +30,17 @@ type adapter struct {
 
 func (d adapter) ServeHTTP(w writer, r *http.Request) {
 	var res Response
+	var wrapLen int
 
 	req, err := NewRequest(r)
 	if err != nil {
 		d.writeError(w, err, req, NewResponse())
 		return
+	}
+
+	wrapLen = len(d.wrappers)
+	for i := 0; i < wrapLen; i++ {
+		req = d.wrappers[i].Request(req)
 	}
 
 	for _, hand := range d.handlers {
@@ -47,10 +55,13 @@ func (d adapter) ServeHTTP(w writer, r *http.Request) {
 		}
 	}
 
-	if res == nil {
-		d.writeError(w, ErrNoHandlers, req, NewResponse())
-		return
+	res = ensureResponse(res)
+
+	for i := wrapLen - 1; i > -1; i-- {
+		res = d.wrappers[i].Response(req, res)
 	}
+
+	res = ensureResponse(res)
 
 	if res.Error() != nil {
 		d.writeError(w, res.Error(), req, res)
@@ -141,4 +152,24 @@ func (d adapter) writeResponse(w writer, code int, head header, body []byte) {
 	} else {
 		_, _ = w.Write(body)
 	}
+}
+
+func (d *adapter) AddWrappers(w ...RequestWrapper) Adapter {
+	d.wrappers = append(d.wrappers, w...)
+	return d
+}
+
+func (d *adapter) SetWrappers(w ...RequestWrapper) Adapter {
+	d.wrappers = w
+	return d
+}
+
+func ensureResponse(res Response) Response {
+	if res == nil {
+		return NewResponse().
+			SetCode(http.StatusInternalServerError).
+			SetError(ErrNoHandlers)
+	}
+
+	return res
 }

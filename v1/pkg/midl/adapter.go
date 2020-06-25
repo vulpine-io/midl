@@ -39,4 +39,25 @@ type Adapter interface {
 	// SetHandlers set and/or overwrite the current list of
 	// Middleware handlers.
 	SetHandlers(...Middleware) Adapter
+
+	// AddWrappers appends request wrappers to the current list of wrappers.
+	//
+	// Wrappers are executed in the following order:
+	//
+	// * For requests: Wrappers will be called in the order they were appended,
+	// but before any Middleware instances are called.
+	// * For responses: Wrappers will be called in reverse from the order they
+	// were appended.
+	AddWrappers(...RequestWrapper) Adapter
+
+	// AddWrappers sets the list of request wrappers to the given input,
+	// overwriting the previous wrapper list with the given list.
+	//
+	// Wrappers are executed in the following order:
+	//
+	// * For requests: Wrappers will be called in the order they appeared in the
+	// input to this function, but before any Middleware instances are called.
+	// * For responses: Wrappers will be called in reverse from the order they
+	// appeared in the input to this function.
+	SetWrappers(...RequestWrapper) Adapter
 }
