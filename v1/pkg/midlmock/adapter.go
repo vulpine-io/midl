@@ -16,6 +16,8 @@ type Adapter struct {
 	SerializerFunc      func(midl.Serializer)
 	AddHandlerFunc      func(...midl.Middleware)
 	SetHandlerFunc      func(...midl.Middleware)
+	AddWrapperFunc      func(...midl.RequestWrapper)
+	SetWrapperFunc      func(...midl.RequestWrapper)
 }
 
 // ServeHTTP is a passthrough for the function stored in the
@@ -69,5 +71,15 @@ func (a *Adapter) AddHandlers(in ...midl.Middleware) midl.Adapter {
 // Returns the current Adapter instance.
 func (a *Adapter) SetHandlers(in ...midl.Middleware) midl.Adapter {
 	a.SetHandlerFunc(in...)
+	return a
+}
+
+func (a *Adapter) AddWrappers(wrap ...midl.RequestWrapper) midl.Adapter {
+	a.AddWrapperFunc(wrap...)
+	return a
+}
+
+func (a *Adapter) SetWrappers(wrap ...midl.RequestWrapper) midl.Adapter {
+	a.SetWrapperFunc(wrap...)
 	return a
 }
