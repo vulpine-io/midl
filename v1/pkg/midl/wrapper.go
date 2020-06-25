@@ -8,12 +8,13 @@ type RequestWrapper interface {
 
 	// Request takes an incoming request instance and returns
 	// a request.
-	//
-	// The returned request will be passed on to additional
-	// middleware/handlers.
-	Request(Request) Request
+	Request(Request)
 
 	// Response takes a request and an outgoing response and
 	// returns a response.
+	//
+	// The response returned by this method will be used when
+	// calling the next wrapper (or if no more wrappers exist
+	// it will be serialized and returned to the client).
 	Response(Request, Response) Response
 }
