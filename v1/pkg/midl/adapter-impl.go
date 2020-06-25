@@ -40,7 +40,7 @@ func (d adapter) ServeHTTP(w writer, r *http.Request) {
 
 	wrapLen = len(d.wrappers)
 	for i := 0; i < wrapLen; i++ {
-		req = d.wrappers[i].Request(req)
+		d.wrappers[i].Request(req)
 	}
 
 	for _, hand := range d.handlers {
