@@ -7,12 +7,6 @@ image:https://goreportcard.com/badge/github.com/vulpine-io/midl[Go Report Card, 
 
 Serializing middleware stack for building APIs in Go.
 
-.Install
-[source,bash]
-----
-$ go get gopkg.in/foxcapades/midl.v1/pkg/midl
-----
-
 == Example
 
 === Simple
@@ -23,7 +17,7 @@ package main
 
 import (
     "net/http"
-    "gopkg.in/foxcapades/midl.v1/pkg/midl"
+    "github.com/vulpine-io/midl.v1/pkg/midl"
 )
 
 func main() {
