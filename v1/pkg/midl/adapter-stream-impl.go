@@ -7,8 +7,9 @@ import (
 	"net/http"
 )
 
-// NewAdapter creates a new Adapter instance with the provided settings
-func NewStreamAdapter(
+// StreamAdapter creates a new streaming output Adapter instance with the
+// provided settings.
+func StreamAdapter(
 	content string,
 	error ErrorSerializer,
 	next ...Middleware,
@@ -30,7 +31,7 @@ type streamAdapter struct {
 	emptyHandler  EmptyHandler
 }
 
-func (d streamAdapter) ServeHTTP(w writer, r *http.Request) {
+func (d streamAdapter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var res Response
 	var wrapLen int
 
@@ -97,7 +98,7 @@ func (d *streamAdapter) ErrorSerializer(err ErrorSerializer) Adapter {
 	return d
 }
 
-func (d *streamAdapter) Serializer(ser Serializer) Adapter {
+func (d *streamAdapter) Serializer(Serializer) Adapter {
 	return d
 }
 
@@ -111,12 +112,12 @@ func (d *streamAdapter) SetHandlers(mid ...Middleware) Adapter {
 	return d
 }
 
-func (d streamAdapter) writeEmpty(w writer, q Request, s Response) {
+func (d streamAdapter) writeEmpty(w http.ResponseWriter, q Request, s Response) {
 	body := d.emptyHandler.Handle(q, s)
 	d.writeResponse(w, s.Code(), s.RawHeaders(), bytes.NewBuffer(body))
 }
 
-func (d streamAdapter) writeBody(w writer, _ Request, s Response) {
+func (d streamAdapter) writeBody(w http.ResponseWriter, _ Request, s Response) {
 	var read io.Reader
 
 	switch v := s.Body().(type) {
@@ -136,12 +137,17 @@ func (d streamAdapter) writeBody(w writer, _ Request, s Response) {
 	d.writeResponse(w, s.Code(), s.RawHeaders(), read)
 }
 
-func (d streamAdapter) writeError(w writer, e error, q Request, s Response) {
+func (d streamAdapter) writeError(w http.ResponseWriter, e error, q Request, s Response) {
 	body := d.errSerializer.Serialize(e, q, s)
 	d.writeResponse(w, s.Code(), s.RawHeaders(), bytes.NewBuffer(body))
 }
 
-func (d streamAdapter) writeResponse(w writer, code int, head header, body io.Reader) {
+func (d streamAdapter) writeResponse(
+	w http.ResponseWriter,
+	code int,
+	head http.Header,
+	body io.Reader,
+) {
 
 	// Don't override user provided header if present.
 	if _, ok := head["Content-Type"]; !ok && d.contentType != "" {

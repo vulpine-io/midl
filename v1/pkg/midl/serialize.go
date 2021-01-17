@@ -65,6 +65,7 @@ type defJSONErrSerializer struct{}
 
 func (d defJSONErrSerializer) Serialize(e error, _ Request, s Response) []byte {
 	s.SetCode(http.StatusInternalServerError)
+	s.SetHeader("Content-Type", "application/json")
 	return []byte(fmt.Sprintf(`{"error":%s}`, strconv.Quote(e.Error())))
 }
 
@@ -83,6 +84,7 @@ type defXMLErrSerializer struct{}
 
 func (d defXMLErrSerializer) Serialize(e error, _ Request, s Response) []byte {
 	s.SetCode(http.StatusInternalServerError)
+	s.SetHeader("Content-Type", "application/xml")
 	return []byte(fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
 <error>%s</error>`, e.Error()))
 }
